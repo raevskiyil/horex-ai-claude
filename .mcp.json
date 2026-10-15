@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "horex": {
+      "type": "http",
+      "url": "https://horex.ae/chatgpt/mcp"
+    }
+  }
+}

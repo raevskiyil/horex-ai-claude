@@ -1,0 +1,29 @@
+---
+name: operations-follow-through
+description: Turn restaurant analysis into explicitly confirmed native Team tasks and track execution, using Central Kitchen demand, batches and deliveries when relevant.
+---
+
+## Permissions, capabilities and request budgets
+
+The plugin cannot edit or post Finance/Catering invoices, mark debts paid, rewrite P&L, correct stock or recipes, send customer messages, make purchases or book travel. Supported task and campaign tools save proposals or settings only; native human approval remains mandatory. Unsupported changes require no business-data call.
+
+Run Horex calls sequentially for the same connection. Keep successful facts and their billing status; a concurrency failure applies only to its rejected call. Retry only a failed read once after the active call finishes and within the remaining user budget. Never repeat an uncertain proposal or provider write.
+
+# From evidence to follow-through
+
+1. Establish the concrete problem, location, dates, evidence coverage and goal. Preserve quality and stockout constraints. Observations and suspected causes are different.
+2. Check `list_team_tasks` for existing work. Read `get_team_task` to follow an existing task and its current assignees, deadline, comments and activity. Private tasks, project roles, active membership and feature permissions apply.
+3. Use `get_team_workspace` to resolve the exact eligible assignee and optional existing project. Search a person by name when the directory is partial. A project observer cannot be assigned. Never add project members or select an invented ID.
+4. When the user wants action, call `prepare_team_task` with one concrete task, exact assignee, due date, acceptance criteria, evidence-based baseline and optional branch/project. State any causal uncertainty in the description. Do not put unrelated private information into a task that will be shared with its audience.
+5. This returns an immutable, expiring proposal. Show the returned review link and summarize the work, assignee, deadline, audience and expected verification. No task exists yet and no assignee has been notified. Only the proposing user can confirm the exact proposal in the authenticated HoreX page. The server rechecks native permissions, branch context, project role and assignee eligibility, then creates one native task atomically. Retries do not duplicate it. There is no model-accessible commit method.
+6. Track the resulting native task via `get_team_task`, including comments and activity. Request fresh operational data for the agreed baseline/follow-up period and evaluate the acceptance criteria. Done means staff execution; it does not establish lower food cost, profit or causation. Keep missing evidence explicit. No autonomous task edits, stock posting, purchasing, production completion or customer messages.
+
+# Central Kitchen evidence
+
+Resolve `get_central_kitchen_workspace` first, then use the selected kitchen/date with `get_central_kitchen_day`. Orders use the selected delivery day; outstanding deliveries and unfinished older production are explicitly included separately. Read one `get_central_kitchen_item` for demand and allocations by branch, stock availability, production batches, output reconciliation, recipe and current estimated cost. Exact `get_central_kitchen_order` and `get_central_kitchen_delivery` preserve the original document and quantities.
+
+Branch users can see their permitted orders/deliveries. Internal production and costs require planning/cooking permission and supplying-kitchen access. A measured output shortfall is not automatically physical waste. Missing cost is unknown; current estimate is not frozen historical actual cost. Central Kitchen production and Stock Batch Breakdowns are different accounting workflows. Never claim that these reads implement FIFO lot accounting or the separate breakdown module. Preserve units, loaded-row limits and source links verbatim.
+
+Business data reads cost 1 AI Credit on success; failed requests are free. Proposal preparation also reads permissions/entities and uses the existing 1-credit request contract. Reviewing/confirming in HoreX and normal Team writes add no plugin read charge. Re-read only when needed; no background polling or subscription is started by this workflow.
+
+After the owner confirms in HoreX, locate the created native task with list_team_tasks using its exact title, then read its returned ID with get_team_task. Do not prepare a second proposal merely to check whether the first one was confirmed.
