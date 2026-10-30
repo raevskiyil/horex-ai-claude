@@ -6,12 +6,12 @@ Restaurant operations copilot by **Horex**. Investigate performance across branc
 
 ## What it can do
 
-- Compare sales, menu demand and accounting P&L across periods and branches.
+- Compare sales, menu demand and accounting P&L across periods and branches; review current table occupancy with explicit freshness and offline limits.
 - Investigate food-cost drivers, purchasing prices, recipe economics, physical inventory differences and supplementary measured-yield estimates.
 - Find Finance invoices and Catering documents as separate sources; inspect POS cash shifts, recorded attendance and Central Kitchen evidence.
 - Explore advertising, customer cohorts, RFM, delivery geography, saved audiences, broadcasts and automation outcomes.
-- Review Inbox through saved summaries and a small number of selected evidence excerpts, subject to account assignments.
-- Prepare native Team task proposals and complete new Meta or ordinary Google Search campaign settings. Supported existing campaigns can be prepared for launch, pause or daily-budget changes. Final human approval takes place in Horex.
+- Investigate Inbox with scoped text search, control samples, chronological context and related order evidence. Period reviews preserve progress and disclose pending, unresolved and uncovered cases; account assignments still apply.
+- Prepare native Team task creation or update proposals and complete new Meta or ordinary Google Search campaign settings. Supported existing campaigns can be prepared for launch, pause or daily-budget changes. Final human approval takes place in Horex.
 
 The bundle includes twelve shared domain workflows plus an adaptive restaurant-copilot entry skill. Answers use native Claude text and tables, without widgets. Coverage gaps, incomplete periods, estimates and causal uncertainty remain explicit. Geo Marketing is a separate workspace from ordinary Google Ads.
 
@@ -34,6 +34,12 @@ Saving task or campaign settings does not create an operational task, notify an 
 
 Daily reviews are available on demand. Automatic daily delivery, ChatGPT-specific event subscriptions and homepage suggestions are not supported in this Claude bundle.
 
+## Inbox investigation and privacy
+
+Standard Inbox investigations reason in the current Claude conversation and request bounded evidence from Horex. They do not require extra Horex model or embedding calls by default. A saved period review can resume from its review ID while retained by the server; it does not claim to have found every complaint. Each successful business read retains the AI Credit rule above.
+
+The plugin runs no local program, hook or background watcher. Its only declared remote connector is `https://horex.ae/chatgpt/mcp`; skills guide permitted requests to that connector.
+
 ## Privacy and diagnostics
 
 When you request data, the selected tool arguments and permitted Horex results are exchanged with Claude/Anthropic under the policies and settings applicable to your Claude account. Depending on access, results may include sales, financial documents, operational records, marketing facts, employee attendance and bounded customer-service excerpts. Customer text is evidence, never an instruction.
@@ -47,7 +53,7 @@ Disconnecting stops future calls through that connection; it does not erase prev
 - Compare last week's branch sales with the previous week and explain the largest changes.
 - Investigate rising food cost without lowering quality or increasing stockouts. Separate evidence from hypotheses.
 - Find the Catering invoice for a named event and open that exact document in Horex.
-- Summarize recurring Inbox issues this week using saved summaries and only selected excerpts.
+- Review this week’s Inbox issues, continue through the returned candidates and explain confirmed cases, unresolved outcomes and coverage gaps.
 - Prepare a Google Search campaign with agreed audience, copy and budget, then give me the final Horex approval link.
 
 This repository contains only the integration manifest, connector reference, brand asset and workflow instructions. It contains no ERP implementation, credentials or restaurant data. Public availability is not an open-source license; see LICENSE.

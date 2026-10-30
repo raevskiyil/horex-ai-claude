@@ -26,4 +26,18 @@ Branch users can see their permitted orders/deliveries. Internal production and 
 
 Business data reads cost 1 AI Credit on success; failed requests are free. Proposal preparation also reads permissions/entities and uses the existing 1-credit request contract. Reviewing/confirming in HoreX and normal Team writes add no plugin read charge. Re-read only when needed; no background polling or subscription is started by this workflow.
 
-After the owner confirms in HoreX, locate the created native task with list_team_tasks using its exact title, then read its returned ID with get_team_task. Do not prepare a second proposal merely to check whether the first one was confirmed.
+After the user confirms in HoreX, call `get_team_task_proposal` with the returned proposal_id. Only committed status establishes execution. Read its task_id with get_team_task; pending, expired, blocked or dismissed does not mean success. Do not prepare a second proposal merely to check confirmation.
+
+# Change an existing task
+
+Read `get_team_task` first and use its exact task_id and current version with `prepare_team_task_action`. Only prepare changes the user requested. Action `update` accepts supplied title, description, status (`todo`, `in_progress`, `in_review`, `done`), priority, due_date or assignee_ids. Omitted fields stay as they are; `clear_due_date=true` removes the deadline, and `assignee_ids=[]` removes all assignees. Resolve new assignees with get_team_workspace for the task's existing project. Preserve acceptance criteria/baseline when editing description.
+
+Action `comment` requires body; `follow` requires following and changes only the current user's following preference; `archive` requires archived (false restores). Supply only fields for that action. Each proposal targets one task and version. No project moves, project membership edits, private audience edits, file uploads or bulk mutations are supported. Native Team edit, comment and audience rules apply separately; read access never implies edit access.
+
+Summarize the exact before/after changes or comment and the existing audience, then give the returned HoreX review link. Preparation changes no task and sends no notification. Only the proposing user can apply the reviewed proposal in HoreX; changes and native notifications commit atomically. If the version changed, read the task again and prepare a fresh proposal for review; never overwrite the newer task silently. Check get_team_task_proposal after approval and use its exact task_id. Repeated confirmation cannot duplicate comments or notifications. Use list_team_tasks status/tab/assignee/project filters and pagination to track execution; totals apply to those filters, not every task in the organization.
+
+# Investigate stop-list availability
+
+Use `get_stop_list_history` with an explicit Dubai date_from/date_to (at most 93 days), optional branch_id, dish search, employee search, current status and page. One row is an uninterrupted dish/location stop overlapping the period, with start/removal, staff, reason and full duration. Totals cover all matching periods before the fixed 50-row page; follow has_more before claiming a complete review. Use the returned source link to the exact filtered report.
+
+Active/removed means current state; it is not the state at the selected end date. Durations are full stop durations, not clipped to the selected dates. Native branch permissions and global dish stops follow the same Operations Audit rules. History includes recording and backfilled active stops; previously removed stops and missing legacy staff cannot be reconstructed. Do not call unknown staff dishonest, infer misconduct from a stop alone or label stop duration as lost revenue. Compare permitted sales/stock evidence separately and prepare a Team follow-up only when requested. This tool cannot change availability.
